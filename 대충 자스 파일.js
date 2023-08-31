@@ -12,6 +12,12 @@ variable     : camel case
 enum>element : pascal case
 */
 
+function main() {
+  let board = new Board()
+  board.getStr()
+  // console.log(board.getPiece(new Position(0, 8)).move())
+}
+
 const ENUM_PIECE = {
   None   : 0,
   Pawn   : 1,
@@ -27,7 +33,6 @@ const ENUM_TEAM = {
   White : 1,
   Black : 2
 }
-
 /**
  * Piece Position
  */
@@ -43,7 +48,7 @@ class Position {
   }
 
   add(pos) {
-    return new Position(this.x + pos.x, this.y + pos.);
+    return new Position(this.x + pos.x, this.y + pos.y);
   }
 
   toString() {
@@ -57,9 +62,43 @@ class Position {
 
 class Board {
   constructor() {
+    /** @type {Array<Piece>} */
     this.board = new Array(8 * 8);
-    for (let i = 0; i < 8 * 8; i++)
-      this.board[i] = new Piece(ENUM_PIECE.None, ENUM_TEAM.None); 
+    for (let i = 0; i < 8 * 8; i++) this.board[i] = new Piece(ENUM_PIECE.None, ENUM_TEAM.None); 
+    
+    
+    this.board[7*8 + 0] = new Piece(ENUM_PIECE.Rook, ENUM_TEAM.White)
+    this.board[7*8 + 7] = new Piece(ENUM_PIECE.Rook, ENUM_TEAM.White)
+    
+    this.board[7*8 + 1] = new Piece(ENUM_PIECE.Knight, ENUM_TEAM.White)
+    this.board[7*8 + 6] = new Piece(ENUM_PIECE.Knight, ENUM_TEAM.White)
+    
+    this.board[7*8 + 2] = new Piece(ENUM_PIECE.Bishop, ENUM_TEAM.White)
+    this.board[7*8 + 5] = new Piece(ENUM_PIECE.Bishop, ENUM_TEAM.White)
+    
+    this.board[7*8 + 3] = new Piece(ENUM_PIECE.Queen, ENUM_TEAM.White)
+    this.board[7*8 + 4] = new Piece(ENUM_PIECE.King, ENUM_TEAM.White)
+
+    
+    this.board[0*8 + 0] = new Piece(ENUM_PIECE.Rook, ENUM_TEAM.Black)
+    this.board[0*8 + 7] = new Piece(ENUM_PIECE.Rook, ENUM_TEAM.Black)
+
+    this.board[0*8 + 1] = new Piece(ENUM_PIECE.Knight, ENUM_TEAM.Black)
+    this.board[0*8 + 6] = new Piece(ENUM_PIECE.Knight, ENUM_TEAM.Black)
+    
+    this.board[0*8 + 2] = new Piece(ENUM_PIECE.Bishop, ENUM_TEAM.Black)
+    this.board[0*8 + 5] = new Piece(ENUM_PIECE.Bishop, ENUM_TEAM.Black)
+    
+    this.board[0*8 + 3] = new Piece(ENUM_PIECE.Queen, ENUM_TEAM.Black)
+    this.board[0*8 + 4] = new Piece(ENUM_PIECE.King, ENUM_TEAM.Black)
+
+    
+    
+    let i = 0;
+    while (i++ < 8){
+      this.board[i + 6*8 - 1] = new Piece(ENUM_PIECE.Pawn, ENUM_TEAM.White)
+      this.board[i + 1*8 - 1] = new Piece(ENUM_PIECE.Pawn, ENUM_TEAM.Black)
+    }
   }
 
   /**
@@ -68,8 +107,16 @@ class Board {
   getPiece(position) {
     return this.board[(position.x - 1) + (position.y - 1) * 8];
   }
+
   getStr() {
-    TODO
+    let str = ""
+    for (let i in this.board){
+      str += this.board[i].type + " ";
+      if ((Number(i)+1)%8 == 0){
+        str += '\n'
+      }
+    }
+    console.log(str)
   }
 }
 
@@ -110,8 +157,8 @@ class Piece {
    * @param {Position} pos {white: 0, black: 1}
    */
   constructor(type, team, pos) {
-    if (team < 0 || team > 2 || typeof(team) != Number){ throw new Error("TEAM MATCH ERROR") }
-    if (type < 0 ||type > 6 || typeof(type) != Number){ throw new Error("TEAM MATCH ERROR") }
+    if (team < 0 || team > 2 || typeof(team) != "number"){ throw new Error("TEAM MATCH ERROR") }
+    if (type < 0 || type > 6 || typeof(type) != "number"){ throw new Error("TYPE MATCH ERROR") }
     
     this.type = type;
     if (type) {
@@ -309,7 +356,7 @@ const ENUM_PIECE_CBF_SPECIAL = [
     }
 
     return arr;
-  }
+  },
 
   p => { // Promotion 1 
     const arr = [];
@@ -407,3 +454,5 @@ const move_5 = (team, currentPos, movePos, inArr) => {
 
   if (piece.team === opponentTeam && piece.lastMove === board.turn && piece.type === ENUM_PIECE.Pawn) inArr.push(movePos);
 }
+
+main()
