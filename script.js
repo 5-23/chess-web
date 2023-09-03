@@ -58,7 +58,7 @@ document.onmousemove = (e) => {
             if (y > 8) y = 8
             if (x > 8) x = 8
             afterId = `${y}_${x}`
-            
+
             hoverNow.style.position = "absolute"
             hoverNow.style.transform = "translate(-50%, -50%)"
             hoverNow.style.top  = `${e.clientY}px`
@@ -69,25 +69,21 @@ document.onmousemove = (e) => {
 }
 
 
-for (i in document.querySelectorAll("section")){
-    if (i == Number(i)) {
-        document.querySelectorAll("section")[i].addEventListener("mousedown", (e) => {
-            e.preventDefault()
-            drag = true
-        });
-        document.querySelectorAll("section")[i].addEventListener("mouseup", (e) => {
-            e.preventDefault()
-            drag = false
-            hoverNow.setAttribute("class", afterId)
-            hoverNow.style = ""
-            document.getElementById(`${beforeId}`).innerHTML = ""
-            document.getElementById(`${afterId}`).innerHTML = hoverNow.outerHTML
-            console.log(hoverNow)
-        });
-        document.querySelectorAll("section")[i].addEventListener("mouseleave", (e) => {
-            e.preventDefault()
-            drag = false
-            hoverNow.style = ""
-        });
-    }
-}
+document.addEventListener("mousedown", (e) => {
+    e.preventDefault()
+    drag = true
+});
+document.addEventListener("mouseup", (e) => {
+    e.preventDefault()
+    drag = false
+    hoverNow.setAttribute("class", afterId)
+    hoverNow.style = ""
+    document.getElementById(`${beforeId}`).innerHTML = ""
+    document.getElementById(`${afterId}`).innerHTML = hoverNow.outerHTML
+    console.log(hoverNow)
+});
+document.addEventListener("mouseleave", (e) => {
+    e.preventDefault()
+    drag = false
+    hoverNow.style = ""
+});
