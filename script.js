@@ -31,16 +31,11 @@ const load = () => {
             let o = ""
             for (objT in obj){
                 obj[objT].forEach((x) => {
-                    console.log()
                     if (i == x[0] && j == x[1]){
-                        o = `<img draggable="true" src="img/${objT}.svg" pos="${i}_${j}" alt="${objT}">`;
+                        o = `<img src="img/${objT}.svg" class="${i}_${j}" alt="${objT}">`;
                         return
                     }
-                    // console.log(objT, x)
                 })
-                // for (objP in ){
-                //     console.log(objP)
-                // }
             }
             document.getElementById(`${i}`).innerHTML += `<section id="${i}_${j}">${o}</section>`
         }
@@ -49,39 +44,50 @@ const load = () => {
 load()
 
 let hoverNow = null
-let hoverBefore = null
-
-
-for (i in document.querySelectorAll("img")){
-    if (i == Number(i)) {
-        document.querySelectorAll("img")[i].addEventListener("dragstart", (e) => {
-            hoverBefore = hoverNow
-        });
+drag = false
+let afterId = "1_1"
+let beforeId = "1_1"
+document.onmousemove = (e) => {
+    e.preventDefault()
+    if (!drag) {
+        hoverNow = e.target
+    }else {
+        if (hoverNow.getAttribute("class") != null){
+            let x = Math.trunc(e.clientX/100)+1
+            let y = Math.trunc(e.clientY/100)+1
+            if (y > 8) y = 8
+            if (x > 8) x = 8
+            afterId = `${y}_${x}`
+            
+            hoverNow.style.position = "absolute"
+            hoverNow.style.transform = "translate(-50%, -50%)"
+            hoverNow.style.top  = `${e.clientY}px`
+            hoverNow.style.left = `${e.clientX}px`
+            beforeId = hoverNow.getAttribute("class")
+        }
     }
 }
 
-for (i in document.querySelectorAll("img")){
-    if (i == Number(i)) {
-        document.querySelectorAll("img")[i].addEventListener("dragend", (e) => {
-                console.log(Now)
-                setTimeout(() => {
-                e.preventDefault()
-                // console.log(hoverBefore)
-                // console.log(hoverNow)
-                // hoverBefore.innerHTML = ""
-                // console.log(Now)
-                // hoverNow.innerHTML = hoverBefore
-            }, 100)
-        });
-    }
-}
 
 for (i in document.querySelectorAll("section")){
     if (i == Number(i)) {
-        document.querySelectorAll("section")[i].addEventListener("mouseover", (e, a) => {
-            hoverIdNow = e.target.getAttribute("pos")? e.target.getAttribute("pos"): e.target.getAttribute("id")
-           
-            console.log(hoverIdNow)
+        document.querySelectorAll("section")[i].addEventListener("mousedown", (e) => {
+            e.preventDefault()
+            drag = true
+        });
+        document.querySelectorAll("section")[i].addEventListener("mouseup", (e) => {
+            e.preventDefault()
+            drag = false
+            hoverNow.setAttribute("class", afterId)
+            hoverNow.style = ""
+            document.getElementById(`${beforeId}`).innerHTML = ""
+            document.getElementById(`${afterId}`).innerHTML = hoverNow.outerHTML
+            console.log(hoverNow)
+        });
+        document.querySelectorAll("section")[i].addEventListener("mouseleave", (e) => {
+            e.preventDefault()
+            drag = false
+            hoverNow.style = ""
         });
     }
 }
