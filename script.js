@@ -52,7 +52,7 @@ document.onmousemove = (e) => {
     if (!drag) {
         hoverNow = e.target
     }else {
-        if (hoverNow.getAttribute("class") != null){
+        if (hoverNow.getAttribute("class") != null && !hoverNow.getAttribute("class").includes("hmm")){
             let x = Math.trunc(e.clientX/100)+1
             let y = Math.trunc(e.clientY/100)+1
             if (y > 8) y = 8
@@ -63,11 +63,11 @@ document.onmousemove = (e) => {
             hoverNow.style.transform = "translate(-50%, -50%)"
             hoverNow.style.top  = `${e.clientY}px`
             hoverNow.style.left = `${e.clientX}px`
+            hoverNow.style.zIndex = `1000`
             beforeId = hoverNow.getAttribute("class")
         }
     }
 }
-
 
 document.addEventListener("mousedown", (e) => {
     e.preventDefault()
@@ -76,11 +76,12 @@ document.addEventListener("mousedown", (e) => {
 document.addEventListener("mouseup", (e) => {
     e.preventDefault()
     drag = false
-    hoverNow.setAttribute("class", afterId)
-    hoverNow.style = ""
-    document.getElementById(`${beforeId}`).innerHTML = ""
-    document.getElementById(`${afterId}`).innerHTML = hoverNow.outerHTML
-    console.log(hoverNow)
+    if (hoverNow.getAttribute("class") != null && !hoverNow.getAttribute("class").includes("hmm")){
+        hoverNow.setAttribute("class", afterId)
+        hoverNow.style = ""
+        document.getElementById(`${beforeId}`).innerHTML = ""
+        document.getElementById(`${afterId}`).innerHTML = hoverNow.outerHTML
+    }
 });
 document.addEventListener("mouseleave", (e) => {
     e.preventDefault()
