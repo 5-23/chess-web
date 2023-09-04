@@ -72,9 +72,16 @@ document.onmousemove = (e) => {
 document.addEventListener("mousedown", (e) => {
     e.preventDefault()
     drag = true
+    let x = Math.trunc(e.clientX/100)+1
+    let y = Math.trunc(e.clientY/100)+1
+    if (y > 8) y = 8
+    if (x > 8) x = 8
+    afterId = `${y}_${x}`
+    beforeId = `${y}_${x}`
 });
 document.addEventListener("mouseup", (e) => {
     e.preventDefault()
+    console.log("MOUSEUPPPPPPP")
     drag = false
     if (hoverNow.getAttribute("class") != null && !hoverNow.getAttribute("class").includes("hmm")){
         hoverNow.setAttribute("class", afterId)
